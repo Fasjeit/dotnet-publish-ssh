@@ -2,9 +2,9 @@
 using System.Buffers.Binary;
 using System.Linq;
 
-namespace DotnetPublishSsh
+namespace DotnetPublishBase
 {
-    internal static class ByteHelperExtensions
+    public static class ByteHelperExtensions
     {
         internal static string ToHexString(this byte[] data)
         {

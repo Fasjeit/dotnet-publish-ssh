@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "DotnetPublishSsh": {
+      "commandName": "Project",
+      "commandLineArgs": "publish-ps --self-contained -c Debug -r win-x64 --diff --host \"192.168.20.52\" --user \"tdss.local\\makarov\" --password \"1qaz@WSX\" --path \"c:\\distr\\tmp\""
+    }
+  }
+}

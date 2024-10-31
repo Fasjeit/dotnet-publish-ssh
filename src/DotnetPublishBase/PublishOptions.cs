@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
 
-namespace DotnetPublishSsh
+namespace DotnetPublishBase
 {
-    internal sealed class PublishSshOptions
+    public sealed class PublishOptions
     {
         public string Host { get; set; }
         public int Port { get; set; } = 22;
@@ -18,9 +18,9 @@ namespace DotnetPublishSsh
         public string[] Args { get; set; } = Array.Empty<string>();
         public bool PrintHelp { get; set; }
 
-        public static PublishSshOptions ParseArgs(string[] args)
+        public static PublishOptions ParseArgs(string[] args)
         {
-            var options = new PublishSshOptions();
+            var options = new PublishOptions();
 
             for (var idx = 0; idx < args.Length; idx++)
             {
@@ -28,55 +28,61 @@ namespace DotnetPublishSsh
                 switch (arg)
                 {
                     case "--ssh-host":
+                    case "--host":
                     {
-                        options.Host = PublishSshOptions.GetValue(ref args, ref idx);
+                        options.Host = GetValue(ref args, ref idx);
                         break;
                     }
                     case "--ssh-port":
+                    case "--port":
                     {
-                        var value = PublishSshOptions.GetValue(ref args, ref idx);
+                        var value = GetValue(ref args, ref idx);
                         options.Port = Convert.ToInt32(value);
                         break;
                     }
                     case "--ssh-user":
+                    case "--user":
                     {
-                        options.User = PublishSshOptions.GetValue(ref args, ref idx);
+                        options.User = GetValue(ref args, ref idx);
                         break;
                     }
                     case "--ssh-password":
+                    case "--password":
                     {
-                        options.Password = PublishSshOptions.GetValue(ref args, ref idx);
+                        options.Password = GetValue(ref args, ref idx);
                         break;
                     }
                     case "--ssh-keyfile":
+                    case "--keyfile":
                     {
-                        options.KeyFile = PublishSshOptions. GetValue(ref args, ref idx);
+                        options.KeyFile = GetValue(ref args, ref idx);
                         break;
                     }
                     case "--ssh-path":
+                    case "--path":
                     {
-                        options.Path = PublishSshOptions.GetValue(ref args, ref idx);
+                        options.Path = GetValue(ref args, ref idx);
                         break;
                     }
                     case "--pre":
                     {
-                        options.PreUploadCommand = PublishSshOptions.GetValue(ref args, ref idx);
+                        options.PreUploadCommand = GetValue(ref args, ref idx);
                         break;
                     }
                     case "--post":
                     {
-                        options.PostUploadCommand = PublishSshOptions.GetValue(ref args, ref idx);
+                        options.PostUploadCommand = GetValue(ref args, ref idx);
                         break;
                     }
                     case "--diff":
                     {
-                        PublishSshOptions.SkipValue(ref args, ref idx);
+                        SkipValue(ref args, ref idx);
                         options.Diff = true;
                         break;
                     }
                     case "-o":
                     {
-                        options.LocalPath = PublishSshOptions.GetValue(ref args, ref idx);
+                        options.LocalPath = GetValue(ref args, ref idx);
                         break;
                     }
                     case "-?":
@@ -96,7 +102,7 @@ namespace DotnetPublishSsh
             return options;
         }
 
-        private static void ValidateOptions(PublishSshOptions options)
+        private static void ValidateOptions(PublishOptions options)
         {
             if (string.IsNullOrEmpty(options.Host) ||
                 string.IsNullOrEmpty(options.User) ||

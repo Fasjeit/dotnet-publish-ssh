@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace DotnetPublishSsh
+namespace DotnetPublishBase
 {
-    internal class LocalFile
+    public class LocalFile
     {
         /// <summary>
         /// Full file name

@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using DotnetPublishBase;
 using Renci.SshNet;
 using Renci.SshNet.Common;
 
 namespace DotnetPublishSsh
 {
-    internal class Uploader : IDisposable
+    internal class SshUploader : IUploader
     {
         private const string ChecksumFileName = "checksum.hash";
 
@@ -45,15 +46,15 @@ namespace DotnetPublishSsh
 
         private bool disposedValue;
 
-        private bool UseDiff;
+        private bool useDiff;
 
-        public Uploader(PublishSshOptions publishSshOptions)
+        public SshUploader(PublishOptions publishSshOptions)
         {
             this.connectionInfo = CreateConnectionInfo(publishSshOptions);
-            this.UseDiff = publishSshOptions.Diff;
+            this.useDiff = publishSshOptions.Diff;
         }
 
-        private static ConnectionInfo CreateConnectionInfo(PublishSshOptions options)
+        private static ConnectionInfo CreateConnectionInfo(PublishOptions options)
         {
             var authenticationMethods = new List<AuthenticationMethod>();
 
@@ -82,7 +83,7 @@ namespace DotnetPublishSsh
         {
             this.Ftp.Connect();
 
-            if (this.UseDiff)
+            if (this.useDiff)
             {
                 Console.WriteLine("Computing remote checksum...");
                 this.CreateChecksumFile(path);
@@ -96,7 +97,7 @@ namespace DotnetPublishSsh
                 }
                 Console.WriteLine("Local checksum computing done!");
                 var diff = this.GetChecksumDiff(path, localChecksum);
-                localFiles = localFiles.Where(lf => diff.Contains($"{Path.Combine(path, lf.RelativeName)}")).ToList();
+                localFiles = localFiles.Where(lf => diff.Contains($"{path}{lf.RelativeName}")).ToList();
 
                 Console.WriteLine($"{localFiles.Count} files changed or created");
             }
@@ -121,7 +122,7 @@ namespace DotnetPublishSsh
         {
             // find path -maxdepth 1 -type f -exec cmd params {} \; > results.out
 
-            var checksumFilePath = Path.Combine(path, ChecksumFileName);
+            var checksumFilePath = $"{path}{ChecksumFileName}";
             var command = $"find {path} -type f -exec sha256sum {{}} \\; > {checksumFilePath}";
             this.Run(command, true);
         }
@@ -131,7 +132,7 @@ namespace DotnetPublishSsh
             try
             {
                 var remoteChecksum = new Checksum();
-                var checksumFilePath = Path.Combine(path, "checksum.hash");
+                var checksumFilePath = $"{path}{ChecksumFileName}";
 
                 using (var stream = new MemoryStream())
                 {
