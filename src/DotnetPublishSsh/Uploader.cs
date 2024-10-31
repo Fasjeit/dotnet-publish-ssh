@@ -32,6 +32,7 @@ namespace DotnetPublishSsh
                 if (this.ssh == null)
                 {
                     this.ssh = new SshClient(this.connectionInfo);
+                    this.ssh.Connect();
                 }
                 return this.ssh;
             }
@@ -85,7 +86,6 @@ namespace DotnetPublishSsh
 
         public void Run(string command)
         {
-            this.Ssh.Connect();
             var sshCommand = this.Ssh.RunCommand(command);
             Console.WriteLine($"{Environment.NewLine}Command output:{Environment.NewLine}{sshCommand.Result}");
 
