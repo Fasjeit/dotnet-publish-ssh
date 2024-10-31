@@ -180,7 +180,7 @@ namespace DotnetPublishSsh
             // Get-ChildItem -File ./ -Recurse | Get-FileHash
 
             var checksumFilePath = Path.Combine(path, PsUploader.ChecksumFileName);
-            var command = $"Get-ChildItem -File {path} -Recurse | " +
+            var command = $"Get-ChildItem -File \"{path}\" -Recurse | " +
                 $"Get-FileHash | Select -Property Hash, Path | " +
                 $"Format-Table -AutoSize -HideTableHeaders | " +
                 $"Out-String -Width 1024";
@@ -190,8 +190,8 @@ namespace DotnetPublishSsh
 
             var result = this.RunCore(command)[0].ToString();
 
-            this.RunCore($"New-Item {checksumFilePath} -Force");
-            this.RunCore($"Set-Content {checksumFilePath} \"{result}\"");
+            this.RunCore($"New-Item \"{checksumFilePath}\" -Force");
+            this.RunCore($"Set-Content \"{checksumFilePath}\" \"{result}\"");
         }
 
         public List<string> GetChecksumDiff(string path, Checksum localChecksum)
@@ -202,7 +202,7 @@ namespace DotnetPublishSsh
                 var checksumFilePath = $"{path}{ChecksumFileName}";
 
                 Console.WriteLine("Getting remote checksum...");
-                var dataString = this.RunCore($"Get-Content {checksumFilePath} | Out-String")[0]
+                var dataString = this.RunCore($"Get-Content \"{checksumFilePath}\" | Out-String")[0]
                     .ToString()
                     .Replace("\\", "/");
                 var splited = dataString.Split(new string[] { "\r\n", "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries);
@@ -290,14 +290,14 @@ namespace DotnetPublishSsh
         private bool FolderExistsPs(string path)
         {
             return string.Equals(
-                this.RunCore($"Test-Path -Path {path}")[0].ToString(), 
+                this.RunCore($"Test-Path -Path \"{path}\"")[0].ToString(), 
                 bool.TrueString, 
                 StringComparison.OrdinalIgnoreCase);
         }
 
         private void CreateDirectoryPs(string path)
         {
-            this.RunCore($"New-Item -ItemType Directory -Path {path}");
+            this.RunCore($"New-Item -ItemType Directory -Path \"{path}\"");
         }
 
         private string Combine(ICollection<string> parts)
