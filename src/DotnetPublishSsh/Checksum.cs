@@ -21,7 +21,7 @@ namespace DotnetPublishSsh
             var index = entry.IndexOf(' ');
             this.AddEntry(
                 hash: entry.Substring(0, index),
-                filePath: entry.Substring(index+2, entry.Length - index - 2));
+                filePath: entry.Substring(index + 2, entry.Length - index - 2));
         }
 
         public void AddFile(string path, LocalFile localFile)
@@ -31,9 +31,7 @@ namespace DotnetPublishSsh
                 using (var sha256 = SHA256.Create())
                 {
                     var hash = sha256.ComputeHash(fileStream)
-                        .ReverseEndianness()
-                        .ToHexString()
-                        .ToLowerInvariant();
+                        .ToHexString();
                     this.AddEntry($"{Path.Combine(path, localFile.RelativeName)}", hash);
                 }
             }
@@ -46,8 +44,8 @@ namespace DotnetPublishSsh
             {
                 if (!other.ContainsKey(file) ||
                     !string.Equals(
-                        other[file], 
-                        this[file], 
+                        other[file],
+                        this[file],
                         System.StringComparison.InvariantCultureIgnoreCase))
                 {
                     diff.Add(file);

@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Renci.SshNet;
+using Renci.SshNet.Common;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Renci.SshNet;
-using Renci.SshNet.Common;
 
 namespace DotnetPublishSsh
 {

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Buffers.Binary;
-using System.Linq;
 
 namespace DotnetPublishSsh
 {
@@ -8,12 +6,13 @@ namespace DotnetPublishSsh
     {
         internal static string ToHexString(this byte[] data)
         {
-            return BitConverter.ToString(data).Replace("-", string.Empty);
+            return Convert.ToHexString(data);
         }
 
         internal static byte[] ReverseEndianness(this byte[] data)
         {
-            return data.Select(b => BinaryPrimitives.ReverseEndianness(b)).ToArray();
+            Array.Reverse(data);
+            return data;
         }
     }
 }
