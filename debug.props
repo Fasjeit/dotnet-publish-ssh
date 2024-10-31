@@ -1,0 +1,19 @@
+<Project>
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+        <Optimize>false</Optimize>
+        <!--Символы с поддержкой удалённой отладки на Linux-->
+        <DebugType>portable</DebugType>
+        <!--Явно указываем необходимость генерации pdb-->
+        <DebugSymbols>true</DebugSymbols>
+        <!--Включаем символы в nuget пакет-->
+        <IncludeSymbols>true</IncludeSymbols>
+        <!--Включаем исходники в отладочные символы-->
+        <EmbedAllSources>true</EmbedAllSources>
+        <DefineConstants>$(DefineConstants);DEBUG</DefineConstants>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+        <Optimize>true</Optimize>
+        <DebugType>portable</DebugType>
+        <DebugSymbols>false</DebugSymbols>
+    </PropertyGroup>
+</Project>

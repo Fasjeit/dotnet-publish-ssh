@@ -10,6 +10,7 @@
         <ToolCommandName>publish-ssh</ToolCommandName>
         <PackageOutputPath>./nupkg</PackageOutputPath>
         <Nullable>enable</Nullable>
+        <NuspecProperties>version=$(Version);configuration=$(Configuration)</NuspecProperties>
 
     </PropertyGroup>
 

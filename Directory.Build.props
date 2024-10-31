@@ -1,0 +1,17 @@
+<Project>
+    <PropertyGroup>
+        <NoWarn>$(NoWarn);NU1803</NoWarn>
+    </PropertyGroup>
+    
+    <PropertyGroup>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+       
+        <RepoRoot>$(MSBuildThisFileDirectory)</RepoRoot>
+        <SourceDir>$([MSBuild]::NormalizeDirectory('$(RepoRoot)', 'src'))</SourceDir>
+        <CommonPath>$(SourceDir)Common</CommonPath>
+    </PropertyGroup>    
+
+    <Import Project="$(MSBuildThisFileDirectory)version.props"/>
+    <Import Project="$(MSBuildThisFileDirectory)debug.props"/>
+    
+</Project>

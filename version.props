@@ -1,0 +1,13 @@
+<Project>
+    <PropertyGroup Condition=" '$(MinorVersion)' == '' ">
+      <MinorVersion>0</MinorVersion>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+        <!--yyyy.MM.dd.HHmm--> 
+        <Version>$([System.DateTime]::UtcNow.ToString(yyyy.MM.dd.$(MinorVersion)))-debug</Version>
+        <DefineConstants>$(DefineConstants);DEBUG</DefineConstants>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+        <Version>$([System.DateTime]::UtcNow.ToString(yyyy.MM.dd.$(MinorVersion)))</Version>
+    </PropertyGroup>
+</Project>
