@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "DotnetPublishSsh": {
+      "commandName": "Project",
+      "commandLineArgs": "publish-ssh --self-contained -c Debug -r linux-x64 --ssh-host \"192.168.83.14\" --ssh-user \"user\" --ssh-password \"1qaz@WSX\" --diff --ssh-path \"/home/user/dev/publish/libcore\""
+    }
+  }
+}

@@ -30,11 +30,19 @@ namespace DotnetPublishSsh
 
             var arguments = string.Join(" ", options.Args);
 
+            ///////////////////////
+            // TEST ONLY - comment to skipp dotnet publish
             if (!PublishLocal(arguments))
             {
                 return;
             }
 
+            // TEST ONLY - uncomment to create test files to publish
+            //File.WriteAllText(Path.Combine(options.LocalPath, "test"), "12");
+            //Directory.CreateDirectory(Path.Combine(options.LocalPath, "folder"));
+            //File.WriteAllText(Path.Combine(options.LocalPath, "folder", "test"), "2");
+            ////////////////
+            ///
             var path = options.Path;
             var localPath = options.LocalPath;
 
@@ -70,10 +78,8 @@ namespace DotnetPublishSsh
             {
                 Console.WriteLine($"Error uploading files to server: {ex.Message}");
             }
+
             Directory.Delete(localPath, true);
-
-
-
         }
 
         private static void PrepareOptions(PublishSshOptions options)
@@ -99,6 +105,11 @@ namespace DotnetPublishSsh
             };
 
             var process = Process.Start(info);
+            if (process == null)
+            {
+                Console.WriteLine($"Cannot start dotnet publish process");
+                return false;
+            }
             process.WaitForExit();
             var exitCode = process.ExitCode;
 
@@ -125,14 +136,17 @@ namespace DotnetPublishSsh
             Console.WriteLine("Arguments and options are the same as for `dotnet publish`");
             Console.WriteLine();
             Console.WriteLine("SSH specific options:");
-            Console.WriteLine("  --ssh-host *              Host address");
-            Console.WriteLine("  --ssh-port                Host port");
-            Console.WriteLine("  --ssh-user *              User name");
-            Console.WriteLine("  --ssh-password            Password");
-            Console.WriteLine("  --ssh-keyfile             Private OpenSSH key file");
-            Console.WriteLine("  --ssh-path *              Publish path on remote server");
-            Console.WriteLine("  --pre                     Run pre upload command");
-            Console.WriteLine("  --post                    Run post upload command");
+            Console.WriteLine("  --ssh-host *    <host>    Host address");
+            Console.WriteLine("  --ssh-port      <port>    Host port");
+            Console.WriteLine("  --ssh-user *    <user>    User name");
+            Console.WriteLine("  --ssh-password  <pswd>    Password");
+            Console.WriteLine("  --ssh-keyfile   <key>     Private OpenSSH key file");
+            Console.WriteLine("  --ssh-path *    <path>    Publish path on remote server");
+            Console.WriteLine();
+            Console.WriteLine("Extra options:");
+            Console.WriteLine("  --pre           <script>  Run pre upload command");
+            Console.WriteLine("  --post          <script>  Run post upload command");
+            Console.WriteLine("  --diff                    Upload only new of modified files");
             Console.WriteLine("(*) required");
             Console.WriteLine();
             Console.WriteLine("All other options will be passed to dotnet publish");

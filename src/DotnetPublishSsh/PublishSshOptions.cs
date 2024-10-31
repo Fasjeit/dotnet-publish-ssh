@@ -8,13 +8,14 @@ namespace DotnetPublishSsh
         public string Host { get; set; }
         public int Port { get; set; } = 22;
         public string User { get; set; }
-        public string Password { get; set; }
-        public string KeyFile { get; set; }
+        public string? Password { get; set; }
+        public string? KeyFile { get; set; }
         public string Path { get; set; }
         public string LocalPath { get; set; }
-        public string PreUploadCommand { get; set; }
-        public string PostUploadCommand { get; set; }
-        public string[] Args { get; set; }
+        public string? PreUploadCommand { get; set; }
+        public string? PostUploadCommand { get; set; }
+        public bool Diff { get; set; } = false;
+        public string[] Args { get; set; } = Array.Empty<string>();
         public bool PrintHelp { get; set; }
 
         public static PublishSshOptions ParseArgs(string[] args)
@@ -65,6 +66,12 @@ namespace DotnetPublishSsh
                     case "--post":
                     {
                         options.PostUploadCommand = PublishSshOptions.GetValue(ref args, ref idx);
+                        break;
+                    }
+                    case "--diff":
+                    {
+                        PublishSshOptions.SkipValue(ref args, ref idx);
+                        options.Diff = true;
                         break;
                     }
                     case "-o":
