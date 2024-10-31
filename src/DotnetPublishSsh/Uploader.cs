@@ -73,7 +73,6 @@ namespace DotnetPublishSsh
 
         public void UploadFiles(string path, ICollection<LocalFile> localFiles)
         {
-                //client.Connect();
                 this.Ftp.Connect();
 
                 foreach (var localFile in localFiles)
