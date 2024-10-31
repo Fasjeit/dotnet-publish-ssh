@@ -3,7 +3,7 @@
     <PropertyGroup>
         <Description>Publish .Net Core app to remote server via SSH</Description>
         <AssemblyTitle>dotnet-publish-ssh</AssemblyTitle>
-        <TargetFrameworks>net6.0</TargetFrameworks>
+        <TargetFrameworks>net8.0</TargetFrameworks>
         <AssemblyName>dotnet-publish-ssh</AssemblyName>
         <OutputType>Exe</OutputType>
         <PackAsTool>true</PackAsTool>
