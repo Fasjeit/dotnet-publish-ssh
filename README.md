@@ -27,7 +27,7 @@ All other options will be passed to dotnet publish
 
 ## copy files
 ```cmd
-publish-ssh --ssh-host 10.0.0.1 --ssh-user root --ssh-password secret --ssh-path /var/www/site`
+publish-ssh --ssh-host 10.0.0.1 --ssh-user root --ssh-password secret --ssh-path /var/www/site
 ```
 
 ## clear old files
