@@ -131,8 +131,8 @@ namespace DotnetPublishSsh
             Console.WriteLine("  --ssh-password            Password");
             Console.WriteLine("  --ssh-keyfile             Private OpenSSH key file");
             Console.WriteLine("  --ssh-path *              Publish path on remote server");
-            Console.WriteLine("  --prepare                 Run pre upload command");
-            Console.WriteLine("  --run                     Run post upload command");
+            Console.WriteLine("  --pre                     Run pre upload command");
+            Console.WriteLine("  --post                    Run post upload command");
             Console.WriteLine("(*) required");
             Console.WriteLine();
             Console.WriteLine("All other options will be passed to dotnet publish");
