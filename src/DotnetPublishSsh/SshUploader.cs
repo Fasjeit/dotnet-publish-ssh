@@ -50,6 +50,10 @@ namespace DotnetPublishSsh
 
         public SshUploader(PublishOptions publishSshOptions)
         {
+            publishSshOptions.Port = publishSshOptions.Port != 0 
+                ? publishSshOptions.Port 
+                : 22;
+
             this.connectionInfo = CreateConnectionInfo(publishSshOptions);
             this.useDiff = publishSshOptions.Diff;
         }

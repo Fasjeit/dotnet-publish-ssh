@@ -39,6 +39,10 @@ namespace DotnetPublishSsh
 
         public PsUploader(PublishOptions publishSshOptions)
         {
+            publishSshOptions.Port = publishSshOptions.Port != 0
+                ? publishSshOptions.Port
+                : 5985;
+
             this.localRunspace = RunspaceFactory.CreateRunspace();
             this.localRunspace.Open();
             this.useDiff = publishSshOptions.Diff;
@@ -63,6 +67,7 @@ namespace DotnetPublishSsh
 
                 powershell.AddCommand("New-PSSession");
                 powershell.AddParameter("ComputerName", options.Host);
+                powershell.AddParameter("Port", options.Port);
                 powershell.AddParameter("Credential", creds);
                 var results = powershell.Invoke();
                 var error = powershell.Streams.Error;
@@ -104,15 +109,19 @@ namespace DotnetPublishSsh
                 Console.WriteLine($"{localFiles.Count} files changed or created");
             }
 
-            using (PowerShell ps = PowerShell.Create())
+            if (localFiles.Count != 0)
             {
-                ps.Runspace = this.localRunspace;
-                foreach (var localFile in localFiles)
+                using (PowerShell ps = PowerShell.Create())
                 {
-                    this.UploadFileCommand(ps, localFile, path);
+                    ps.Runspace = this.localRunspace;
+
+                    foreach (var localFile in localFiles)
+                    {
+                        this.UploadFileCommand(ps, localFile, path);
+                    }
+                    Console.WriteLine($"Begin Uploading... {localFiles.Count} files.");
+                    ps.Invoke();
                 }
-                Console.WriteLine($"Begin Uploading... {localFiles.Count} files.");
-                ps.Invoke();
             }
             
             Console.WriteLine($"Uploaded {localFiles.Count} files.");

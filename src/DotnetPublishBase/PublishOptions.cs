@@ -6,7 +6,7 @@ namespace DotnetPublishBase
     public sealed class PublishOptions
     {
         public string Host { get; set; }
-        public int Port { get; set; } = 22;
+        public int Port { get; set; } = 0;
         public string User { get; set; }
         public string? Password { get; set; }
         public string? KeyFile { get; set; }
