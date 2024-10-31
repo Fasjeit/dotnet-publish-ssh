@@ -120,7 +120,7 @@ namespace DotnetPublishSsh
         {
             Console.WriteLine("Publish to remote server via SSH");
             Console.WriteLine();
-            Console.WriteLine("Usage: dotnet publish-ssh [arguments] [options]");
+            Console.WriteLine("Usage: publish-ssh [arguments] [options]");
             Console.WriteLine();
             Console.WriteLine("Arguments and options are the same as for `dotnet publish`");
             Console.WriteLine();
