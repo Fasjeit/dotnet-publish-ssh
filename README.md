@@ -5,7 +5,7 @@ Simple publish your .Net Core application to linux server via SSH.
 # Usage
 
 * Run `BuildAndInstall.ps1`
-* Run `publish-ssh` with options:
+* Run `publish-ssh` in project folder with options:
 ```
 Usage: publish-ssh [arguments] [options]
 Arguments and options are the same as for `dotnet publish`
@@ -25,12 +25,12 @@ All other options will be passed to dotnet publish
 
 # Example
 
-## copy files
+## publish project and copy files
 ```cmd
 publish-ssh --ssh-host 10.0.0.1 --ssh-user root --ssh-password secret --ssh-path /var/www/site
 ```
 
-## clear old files
+## clear old files before publish
 ```cmd
 publish-ssh --ssh-host 10.0.0.1 --ssh-user root --ssh-password secret --ssh-path /var/www/site --pre "rm -rf /var/www/site/*"
 ```
