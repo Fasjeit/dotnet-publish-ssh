@@ -1,6 +1,10 @@
 # dotnet-publish-ssh
 
-Simple publish your .Net Core application to linux server via SSH.
+<p align="left">
+  <img src="ico/icons8-console-96.png" width="48" alt="accessibility text">
+</p>
+
+Simply publish your .Net Core application to linux server via SSH.
 
 Based on original [project](https://github.com/albekov/dotnet-publish-ssh) by [albekov](https://github.com/albekov).
 
@@ -41,3 +45,5 @@ publish-ssh --ssh-host 10.0.0.1 --ssh-user root --ssh-password secret --ssh-path
 ```cmd
 publish-ssh --ssh-host 10.0.0.1 --ssh-user root --ssh-password secret --ssh-path /var/www/site --pre "rm -rf /var/www/site/*"
 ```
+
+icon by [icons8](icons8.com)
