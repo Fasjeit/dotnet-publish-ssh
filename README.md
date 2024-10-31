@@ -41,13 +41,13 @@ publish-ssh --host 10.0.0.1 --user root --password secret --path /var/www/site -
 
 setup :
 
-powershell```
+```powershell
 winrm quickconfig 
 ````
 
 test :  
 
-powershell```
+```powershell
 WinRM enumerate winrm/config/listener
 ````
 
@@ -55,12 +55,12 @@ WinRM enumerate winrm/config/listener
 
 setup : 
 
-powershell```
+```powershell
 Set-Item WSMan:\localhost\Client\TrustedHosts -Value IP_OF_SERVER_MACHINE
 ````
 
 test :  
-powershell```
+```powershell
 Test-WsMan IP_OF_SERVER_MACHINE
 ```
 
