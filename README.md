@@ -1,23 +1,23 @@
 # dotnet-publish-ssh
 
-Simple publish your .Net Core application to linux server via SSH.
+Simple publish your .Net Core application to linux server via SSH or WinRM.
 
 # Usage
 
-* Run `BuildAndInstall.ps1`
-* Run `publish-ssh` in project folder with options:
+* Run `BuildAndInstall_ALL.ps1`
+* Run `publish-ssh` or `publish-ps` in project folder with options:
 ```
 Usage: publish-ssh [arguments] [options]
 Arguments and options are the same as for `dotnet publish`
-SSH specific options:
-  --ssh-host *              Host address
-  --ssh-port                Host port
-  --ssh-user *              User name
-  --ssh-password            Password
-  --ssh-keyfile             Private OpenSSH key file
-  --ssh-path *              Publish path on remote server
-  --pre                     Run pre upload command
-  --post                    Run post upload command
+Connection specific options:
+  --host *              Host address
+  --port                Host port
+  --user *              User name
+  --password            Password
+  --keyfile             Private OpenSSH key file
+  --path *              Publish path on remote server
+  --pre                 Run pre upload command
+  --post                Run post upload command
 (*) required
 
 All other options will be passed to dotnet publish
@@ -27,10 +27,50 @@ All other options will be passed to dotnet publish
 
 ## publish project and copy files
 ```cmd
-publish-ssh --ssh-host 10.0.0.1 --ssh-user root --ssh-password secret --ssh-path /var/www/site
+publish-ssh --host 10.0.0.1 --user root --password secret --path /var/www/site
 ```
 
 ## clear old files before publish
 ```cmd
-publish-ssh --ssh-host 10.0.0.1 --ssh-user root --ssh-password secret --ssh-path /var/www/site --pre "rm -rf /var/www/site/*"
+publish-ssh --host 10.0.0.1 --user root --password secret --path /var/www/site --pre "rm -rf /var/www/site/*"
+```
+
+# WinRM setup
+
+## server
+
+setup :
+
+powershell```
+winrm quickconfig 
+````
+
+test :  
+
+powershell```
+WinRM enumerate winrm/config/listener
+````
+
+## client (using server ip)
+
+setup : 
+
+powershell```
+Set-Item WSMan:\localhost\Client\TrustedHosts -Value IP_OF_SERVER_MACHINE
+````
+
+test :  
+powershell```
+Test-WsMan IP_OF_SERVER_MACHINE
+```
+
+# SSH setup
+
+## server
+
+setup: 
+
+```bash
+sudo apt install openssh-server -y
+sudo systemctl enable ssh
 ```

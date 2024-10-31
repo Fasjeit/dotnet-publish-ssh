@@ -129,7 +129,7 @@ namespace DotnetPublishSsh
 
         public void Run(string command, bool silent = false)
         {
-            this.RunCore(command, silent, false);
+            this.RunCore($"{command} | Out-String -Width 1024", silent, false);
         }
 
         internal Collection<PSObject> RunCore(
@@ -147,7 +147,8 @@ namespace DotnetPublishSsh
                 if (!silent)
                 {
                     // for getting text output instead of object
-                    powershell.AddCommand("Out-String -Width 1024");
+                    powershell.AddCommand("Out-String");
+                    powershell.AddParameter("Width", 1024);
                 }
 
                 var results = powershell.Invoke();
