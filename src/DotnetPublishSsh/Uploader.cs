@@ -84,6 +84,10 @@ namespace DotnetPublishSsh
 
             if (this.UseDiff)
             {
+                Console.WriteLine("Computing remote checksum...");
+                this.CreateChecksumFile(path);
+                Console.WriteLine("Remote checksum computing done!");
+
                 Console.WriteLine($"Computing local checksum...");
                 var localChecksum = new Checksum();
                 foreach (var file in localFiles)
@@ -102,8 +106,6 @@ namespace DotnetPublishSsh
                 this.UploadFile(localFile, this.Ftp, path);
             }
             Console.WriteLine($"Uploaded {localFiles.Count} files.");
-
-            this.CreateChecksumFile(path);
         }
 
         public void Run(string command, bool silent = false)
@@ -118,13 +120,10 @@ namespace DotnetPublishSsh
         public void CreateChecksumFile(string path)
         {
             // find path -maxdepth 1 -type f -exec cmd params {} \; > results.out
-            Console.WriteLine("Computing remote checksum...");
 
             var checksumFilePath = Path.Combine(path, ChecksumFileName);
             var command = $"find {path} -type f -exec sha256sum {{}} \\; > {checksumFilePath}";
             this.Run(command, true);
-
-            Console.WriteLine("Remote checksum computing done!");
         }
 
         public List<string> GetChecksumDiff(string path, Checksum localChecksum)
