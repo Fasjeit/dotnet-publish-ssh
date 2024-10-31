@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Renci.SshNet;
+using Renci.SshNet.Security;
 
 namespace DotnetPublishSsh
 {
@@ -84,8 +85,8 @@ namespace DotnetPublishSsh
 
         public void Run(string command)
         {
-            this.ssh.Connect();
-            var sshCommand = this.ssh.RunCommand(command);
+            this.Ssh.Connect();
+            var sshCommand = this.Ssh.RunCommand(command);
             Console.WriteLine($"{Environment.NewLine}Command output:{Environment.NewLine}{sshCommand.Result}");
 
             //Console.WriteLine($"Uploaded {localFiles.Count} files.");
@@ -153,8 +154,8 @@ namespace DotnetPublishSsh
             {
                 if (disposing)
                 {
-                    this.ftp.Dispose();
-                    this.ssh.Dispose();
+                    this.ftp?.Dispose();
+                    this.ssh?.Dispose();
                 }
                 this.disposedValue = true;
             }
