@@ -7,7 +7,7 @@ Simple publish your .Net Core application to linux server via SSH.
 * Run `BuildAndInstall.ps1`
 * Run `publish-ssh` with options:
 ```
-Usage: dotnet publish-ssh [arguments] [options]
+Usage: publish-ssh [arguments] [options]
 Arguments and options are the same as for `dotnet publish`
 SSH specific options:
   --ssh-host *              Host address
