@@ -16,8 +16,8 @@ SSH specific options:
   --ssh-password            Password
   --ssh-keyfile             Private OpenSSH key file
   --ssh-path *              Publish path on remote server
-  --pre                     Run pre upload command"
-  --post                    Run post upload command"
+  --pre                     Run pre upload command
+  --post                    Run post upload command
 (*) required
 
 All other options will be passed to dotnet publish
