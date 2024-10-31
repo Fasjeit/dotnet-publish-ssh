@@ -16,8 +16,11 @@ Connection specific options:
   --password            Password
   --keyfile             Private OpenSSH key file
   --path *              Publish path on remote server
-  --pre                 Run pre upload command
-  --post                Run post upload command
+
+Extra options:
+  --pre           <script>  Run pre upload command
+  --post          <script>  Run post upload command
+  --diff                    Upload only new of modified files
 (*) required
 
 All other options will be passed to dotnet publish
