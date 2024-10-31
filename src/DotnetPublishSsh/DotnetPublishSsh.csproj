@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <Description>Publish .Net Core app to remote server via SSH</Description>
@@ -9,6 +9,7 @@
         <PackAsTool>true</PackAsTool>
         <ToolCommandName>publish-ssh</ToolCommandName>
         <PackageOutputPath>./nupkg</PackageOutputPath>
+        <Nullable>enable</Nullable>
 
     </PropertyGroup>
 

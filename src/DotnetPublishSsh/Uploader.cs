@@ -3,15 +3,17 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Renci.SshNet;
-using Renci.SshNet.Security;
+using Renci.SshNet.Common;
 
 namespace DotnetPublishSsh
 {
     internal class Uploader : IDisposable
     {
+        private const string ChecksumFileName = "checksum.hash";
+
         public char DirectorySeparator { get; set; } = '/';
 
-        private SftpClient ftp;
+        private SftpClient? ftp;
         private SftpClient Ftp
         {
             get
@@ -24,7 +26,7 @@ namespace DotnetPublishSsh
             }
         }
 
-        private SshClient ssh;
+        private SshClient? ssh;
         private SshClient Ssh
         {
             get
@@ -43,9 +45,12 @@ namespace DotnetPublishSsh
 
         private bool disposedValue;
 
+        private bool UseDiff;
+
         public Uploader(PublishSshOptions publishSshOptions)
         {
             this.connectionInfo = CreateConnectionInfo(publishSshOptions);
+            this.UseDiff = publishSshOptions.Diff;
         }
 
         private static ConnectionInfo CreateConnectionInfo(PublishSshOptions options)
@@ -75,21 +80,82 @@ namespace DotnetPublishSsh
 
         public void UploadFiles(string path, ICollection<LocalFile> localFiles)
         {
-                this.Ftp.Connect();
+            this.Ftp.Connect();
 
-                foreach (var localFile in localFiles)
+            if (this.UseDiff)
+            {
+                Console.WriteLine($"Computing local checksum...");
+                var localChecksum = new Checksum();
+                foreach (var file in localFiles)
                 {
-                    this.UploadFile(localFile, ftp, path);
+                    localChecksum.AddFile(path, file);
                 }
+                Console.WriteLine("Local checksum computing done!");
+                var diff = this.GetChecksumDiff(path, localChecksum);
+                localFiles = localFiles.Where(lf => diff.Contains($"{Path.Combine(path, lf.RelativeName)}")).ToList();
+
+                Console.WriteLine($"{localFiles.Count} files changed or created");
+            }
+
+            foreach (var localFile in localFiles)
+            {
+                this.UploadFile(localFile, this.Ftp, path);
+            }
             Console.WriteLine($"Uploaded {localFiles.Count} files.");
+
+            this.CreateChecksumFile(path);
         }
 
-        public void Run(string command)
+        public void Run(string command, bool silent = false)
         {
             var sshCommand = this.Ssh.RunCommand(command);
-            Console.WriteLine($"{Environment.NewLine}Command output:{Environment.NewLine}{sshCommand.Result}");
+            if (!silent)
+            {
+                Console.WriteLine($"{Environment.NewLine}Command output:{Environment.NewLine}{sshCommand.Result}");
+            }
+        }
 
-            //Console.WriteLine($"Uploaded {localFiles.Count} files.");
+        public void CreateChecksumFile(string path)
+        {
+            // find path -maxdepth 1 -type f -exec cmd params {} \; > results.out
+            Console.WriteLine("Computing remote checksum...");
+
+            var checksumFilePath = Path.Combine(path, ChecksumFileName);
+            var command = $"find {path} -type f -exec sha256sum {{}} \\; > {checksumFilePath}";
+            this.Run(command, true);
+
+            Console.WriteLine("Remote checksum computing done!");
+        }
+
+        public List<string> GetChecksumDiff(string path, Checksum localChecksum)
+        {
+            try
+            {
+                var remoteChecksum = new Checksum();
+                var checksumFilePath = Path.Combine(path, "checksum.hash");
+
+                using (var stream = new MemoryStream())
+                {
+                    Console.WriteLine("Getting remote checksum...");
+                    this.Ftp.DownloadFile(checksumFilePath, stream);
+                    stream.Position = 0;
+                    using (var reader = new StreamReader(stream))
+                    {
+                        var line = reader.ReadLine();
+                        remoteChecksum.AddEntry(line);
+                        while (line != null)
+                        {
+                            line = reader.ReadLine();
+                            remoteChecksum.AddEntry(line);
+                        }
+                    }
+                }
+                return localChecksum.Diff(remoteChecksum);
+            }
+            catch (SftpPathNotFoundException)
+            {
+                return localChecksum.Keys.ToList();
+            }
         }
 
         private void UploadFile(LocalFile localFile, SftpClient ftp, string path)
