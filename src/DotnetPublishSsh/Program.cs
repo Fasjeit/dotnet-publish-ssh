@@ -31,7 +31,7 @@ namespace DotnetPublishSsh
             var arguments = string.Join(" ", options.Args);
 
             ///////////////////////
-            // TEST ONLY - comment to skipp dotnet publish
+            // TEST ONLY - comment to skip dotnet publish
             if (!PublishLocal(arguments))
             {
                 return;
@@ -91,7 +91,7 @@ namespace DotnetPublishSsh
                 options.LocalPath = tempPath;
             }
 
-            options.Args = options.Args.Concat(new[] { "-o", options.LocalPath }).ToArray();
+            options.Args = options.Args.Concat(["-o", options.LocalPath]).ToArray();
         }
 
         private static bool PublishLocal(string arguments)

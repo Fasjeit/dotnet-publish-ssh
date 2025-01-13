@@ -42,11 +42,11 @@ namespace DotnetPublishSsh
         }
 
         private readonly ConnectionInfo connectionInfo;
-        private readonly HashSet<string> existingDirectories = new HashSet<string>();
+        private readonly HashSet<string> existingDirectories = [];
 
         private bool disposedValue;
 
-        private bool UseDiff;
+        private readonly bool UseDiff;
 
         public Uploader(PublishSshOptions publishSshOptions)
         {
@@ -196,7 +196,7 @@ namespace DotnetPublishSsh
 
         private void EnsureDirExists(SftpClient ftp, string path)
         {
-            var parts = path.Split(new[] { this.DirectorySeparator }, StringSplitOptions.RemoveEmptyEntries)
+            var parts = path.Split([this.DirectorySeparator], StringSplitOptions.RemoveEmptyEntries)
                 .Where(p => !string.IsNullOrEmpty(p))
                 .ToList();
 
@@ -231,7 +231,7 @@ namespace DotnetPublishSsh
         {
             var path = this.DirectorySeparator +
                        string.Join(this.DirectorySeparator.ToString(), parts) +
-                       (parts.Any() ? this.DirectorySeparator.ToString() : "");
+                       (parts.Count != 0 ? this.DirectorySeparator.ToString() : "");
             return path;
         }
 

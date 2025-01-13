@@ -49,9 +49,9 @@ namespace DotnetPublishSsh
             var diff = new List<string>();
             foreach (var file in this.Keys)
             {
-                if (!other.ContainsKey(file) ||
+                if (!other.TryGetValue(file, out var fileValue) ||
                     !string.Equals(
-                        other[file],
+                        fileValue,
                         this[file],
                         System.StringComparison.InvariantCultureIgnoreCase))
                 {

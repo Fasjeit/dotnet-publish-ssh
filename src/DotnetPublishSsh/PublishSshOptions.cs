@@ -16,7 +16,7 @@ namespace DotnetPublishSsh
         public string? PreUploadCommand { get; set; }
         public string? PostUploadCommand { get; set; }
         public bool Diff { get; set; } = false;
-        public string[] Args { get; set; } = Array.Empty<string>();
+        public string[] Args { get; set; } = [];
         public bool PrintHelp { get; set; }
 
         public static PublishSshOptions ParseArgs(string[] args)
