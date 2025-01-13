@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.IO;
 using System.Security.Cryptography;
+using System;
 
 namespace DotnetPublishSsh
 {
-    internal class Checksum : Dictionary<string, string>
+    internal class Checksum : ConcurrentDictionary<string, string>
     {
         public void AddEntry(string filePath, string hash)
         {
@@ -19,6 +21,11 @@ namespace DotnetPublishSsh
                 return;
             }
             var index = entry.IndexOf(' ');
+            if (index <= 0 || index + 2 >= entry.Length)
+            {
+                throw new ArgumentException("Invalid entry format.", nameof(entry));
+            }
+
             this.AddEntry(
                 hash: entry.Substring(0, index),
                 filePath: entry.Substring(index + 2, entry.Length - index - 2));

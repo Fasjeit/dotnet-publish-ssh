@@ -1,17 +1,18 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace DotnetPublishSsh
 {
     internal sealed class PublishSshOptions
     {
-        public string Host { get; set; }
+        public string Host { get; set; } = "undef";
         public int Port { get; set; } = 22;
-        public string User { get; set; }
+        public string User { get; set; } = "undef";
         public string? Password { get; set; }
         public string? KeyFile { get; set; }
-        public string Path { get; set; }
-        public string LocalPath { get; set; }
+        public string Path { get; set; } = "undef";
+        public string LocalPath { get; set; } = "undef";
         public string? PreUploadCommand { get; set; }
         public string? PostUploadCommand { get; set; }
         public bool Diff { get; set; } = false;
@@ -28,64 +29,64 @@ namespace DotnetPublishSsh
                 switch (arg)
                 {
                     case "--ssh-host":
-                    {
-                        options.Host = PublishSshOptions.GetValue(ref args, ref idx);
-                        break;
-                    }
+                        {
+                            options.Host = PublishSshOptions.GetValue(ref args, ref idx);
+                            break;
+                        }
                     case "--ssh-port":
-                    {
-                        var value = PublishSshOptions.GetValue(ref args, ref idx);
-                        options.Port = Convert.ToInt32(value);
-                        break;
-                    }
+                        {
+                            var value = PublishSshOptions.GetValue(ref args, ref idx);
+                            options.Port = Convert.ToInt32(value);
+                            break;
+                        }
                     case "--ssh-user":
-                    {
-                        options.User = PublishSshOptions.GetValue(ref args, ref idx);
-                        break;
-                    }
+                        {
+                            options.User = PublishSshOptions.GetValue(ref args, ref idx);
+                            break;
+                        }
                     case "--ssh-password":
-                    {
-                        options.Password = PublishSshOptions.GetValue(ref args, ref idx);
-                        break;
-                    }
+                        {
+                            options.Password = PublishSshOptions.GetValue(ref args, ref idx);
+                            break;
+                        }
                     case "--ssh-keyfile":
-                    {
-                        options.KeyFile = PublishSshOptions. GetValue(ref args, ref idx);
-                        break;
-                    }
+                        {
+                            options.KeyFile = PublishSshOptions.GetValue(ref args, ref idx);
+                            break;
+                        }
                     case "--ssh-path":
-                    {
-                        options.Path = PublishSshOptions.GetValue(ref args, ref idx);
-                        break;
-                    }
+                        {
+                            options.Path = PublishSshOptions.GetValue(ref args, ref idx);
+                            break;
+                        }
                     case "--pre":
-                    {
-                        options.PreUploadCommand = PublishSshOptions.GetValue(ref args, ref idx);
-                        break;
-                    }
+                        {
+                            options.PreUploadCommand = PublishSshOptions.GetValue(ref args, ref idx);
+                            break;
+                        }
                     case "--post":
-                    {
-                        options.PostUploadCommand = PublishSshOptions.GetValue(ref args, ref idx);
-                        break;
-                    }
+                        {
+                            options.PostUploadCommand = PublishSshOptions.GetValue(ref args, ref idx);
+                            break;
+                        }
                     case "--diff":
-                    {
-                        PublishSshOptions.SkipValue(ref args, ref idx);
-                        options.Diff = true;
-                        break;
-                    }
+                        {
+                            PublishSshOptions.SkipValue(ref args, ref idx);
+                            options.Diff = true;
+                            break;
+                        }
                     case "-o":
-                    {
-                        options.LocalPath = PublishSshOptions.GetValue(ref args, ref idx);
-                        break;
-                    }
+                        {
+                            options.LocalPath = PublishSshOptions.GetValue(ref args, ref idx);
+                            break;
+                        }
                     case "-?":
                     case "-h":
                     case "--help":
-                    {
-                        options.PrintHelp = true;
-                        break;
-                    }
+                        {
+                            options.PrintHelp = true;
+                            break;
+                        }
                 }
             }
 

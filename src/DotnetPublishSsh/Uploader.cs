@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace DotnetPublishSsh
 {
@@ -90,10 +91,31 @@ namespace DotnetPublishSsh
 
                 Console.WriteLine($"Computing local checksum...");
                 var localChecksum = new Checksum();
-                foreach (var file in localFiles)
+                try
                 {
-                    localChecksum.AddFile(path, file);
+                    Parallel.ForEach(localFiles, file =>
+                    {
+                        try
+                        {
+                            localChecksum.AddFile(path, file);
+                        }
+                        catch (Exception ex)
+                        {
+                            // Log the exception or handle it as needed
+                            Console.WriteLine($"Error processing file {file.RelativeName}: {ex.Message}");
+                        }
+                    });
                 }
+                catch (AggregateException ex)
+                {
+                    // Handle any exceptions that occurred during parallel processing
+                    Console.WriteLine("Errors occurred during processing:");
+                    foreach (var innerEx in ex.InnerExceptions)
+                    {
+                        Console.WriteLine(innerEx.Message);
+                    }
+                }
+
                 Console.WriteLine("Local checksum computing done!");
                 var diff = this.GetChecksumDiff(path, localChecksum);
                 localFiles = localFiles.Where(lf => diff.Contains($"{Path.Combine(path, lf.RelativeName)}")).ToList();

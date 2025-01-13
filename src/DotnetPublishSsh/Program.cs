@@ -42,7 +42,7 @@ namespace DotnetPublishSsh
             //Directory.CreateDirectory(Path.Combine(options.LocalPath, "folder"));
             //File.WriteAllText(Path.Combine(options.LocalPath, "folder", "test"), "2");
             ////////////////
-            ///
+            //
             var path = options.Path;
             var localPath = options.LocalPath;
 
@@ -91,7 +91,7 @@ namespace DotnetPublishSsh
                 options.LocalPath = tempPath;
             }
 
-            options.Args = options.Args.Concat(new[] {"-o", options.LocalPath}).ToArray();
+            options.Args = options.Args.Concat(new[] { "-o", options.LocalPath }).ToArray();
         }
 
         private static bool PublishLocal(string arguments)
